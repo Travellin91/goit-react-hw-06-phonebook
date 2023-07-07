@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
 import { changeFilter } from '../../redux/contactsSlice';
+import '../Filter/filter.css'; 
 
 const Filter = ({ value, onChange }) => (
-  <label>
+  <label className="filter-label">
     Find contacts by name
-    <input type="text" value={value} onChange={onChange} />
+    <input className="filter-input" type="text" value={value} onChange={onChange} />
   </label>
 );
 

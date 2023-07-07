@@ -11,8 +11,8 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <div>
-          <h1>Contact Book</h1>
+        <div className="app-container">
+          <h1 className="app-heading">PhoneBook</h1>
           <ContactForms />
           <Filter />
           <ContactList />

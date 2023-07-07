@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../redux/contactsAction';
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
+import '../ContactForms/contactforms.css';
 
 const ContactForm = ({ items, onSubmit }) => {
   const [name, setName] = useState('');
@@ -42,14 +43,15 @@ const ContactForm = ({ items, onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor={loginInputNameId}>
+    <form className="contact-form" onSubmit={handleSubmit}>
+      <label htmlFor={loginInputNameId} className="contact-form-label">
         Name
         <input
+          className="contact-form-input"
           type="text"
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
           id={loginInputNameId}
           value={name}
@@ -57,13 +59,14 @@ const ContactForm = ({ items, onSubmit }) => {
         />
       </label>
 
-      <label htmlFor={loginInputNumberId}>
+      <label htmlFor={loginInputNumberId} className="contact-form-label">
         Number
         <input
+          className="contact-form-input input"
           type="tel"
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Номер телефона должен состоять из цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
           id={loginInputNumberId}
           value={number}
@@ -71,7 +74,9 @@ const ContactForm = ({ items, onSubmit }) => {
         />
       </label>
 
-      <button type="submit">Add contact</button>
+      <button className="contact-form-button" type="submit">
+        Add contact
+      </button>
     </form>
   );
 };

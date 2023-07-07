@@ -3,18 +3,24 @@
 .contact-list {
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .contact-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 10px;
   border: 2px solid #ccc;
   margin-bottom: 10px;
   gap: 4px;
   border-radius: 8px;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
+  max-width: 400px;
+  width: 100%;
 }
 
 .contact-name {

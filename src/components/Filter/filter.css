@@ -1,14 +1,21 @@
-.filter-input {
+.filter-label {
   margin-bottom: 20px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
 }
 
-.filter-input .form-control {
+.filter-input {
   border-radius: 5px;
   border: 2px solid #ccc;
   padding: 5px;
+  margin-top: 10px;
 }
 
-.filter-input .form-control:focus {
+.filter-input:focus {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
