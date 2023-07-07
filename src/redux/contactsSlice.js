@@ -1,7 +1,18 @@
-import React, { useState } from 'react';
-import { nanoid } from 'nanoid';
-import Notiflix from 'notiflix';
-import './contactforms.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from './store.js';
+import { createSlice } from '@reduxjs/toolkit';
 
+const contactsSlice = createSlice({
+  name: 'contacts',
+  initialState: [],
+  reducers: {
+    addContact: (state, action) => {
+      state.push(action.payload);
+    },
+    deleteContact: (state, action) => {
+      return state.filter((contact) => contact.id !== action.payload);
+    },
+  },
+});
+
+export const { addContact, deleteContact } = contactsSlice.actions;
+
+export default contactsSlice.reducer;

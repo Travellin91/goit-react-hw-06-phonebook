@@ -1,14 +1,15 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addContact, deleteContact, setFilter } from './redux/store';
 import { Container, Row, Col } from 'react-bootstrap';
-import ContactForms from "./ContactForms/ContactForms";
-import ContactList from "./ContactList/ContactList";
-import Filter from "./Filter/Filter";
+import ContactForms from './ContactForms/ContactForms';
+import ContactList from './ContactList/ContactList';
+import Filter from './Filter/Filter';
+import { addContact, deleteContact } from '../redux/contactsSlice';
+import { setFilter } from '../redux/filterSlice';
 
 function App() {
-  const contacts = useSelector(state => state.contacts);
-  const filter = useSelector(state => state.filter);
+  const contacts = useSelector((state) => state.contacts);
+  const filter = useSelector((state) => state.filter);
   const dispatch = useDispatch();
 
   const addNewContact = (newContact) => {
@@ -23,7 +24,9 @@ function App() {
     dispatch(setFilter(filterValue));
   };
 
-  const filteredContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
+  const filteredContacts = contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
   return (
     <Container>
@@ -31,7 +34,7 @@ function App() {
 
       <Row>
         <Col md={6}>
-          <ContactForms addContact={addNewContact} contacts={contacts} />
+          <ContactForms addContact={addNewContact} />
         </Col>
         <Col md={6}>
           <div className="contacts-section">
