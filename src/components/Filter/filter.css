@@ -1,0 +1,15 @@
+.filter-input {
+  margin-bottom: 20px;
+}
+
+.filter-input .form-control {
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  padding: 5px;
+}
+
+.filter-input .form-control:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
