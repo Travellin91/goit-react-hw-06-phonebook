@@ -1,24 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteContact } from '../../redux/contactsSlice';
 import './contactlist.css';
 
-function ContactList({ contacts, deleteContact }) {
+function ContactList() {
+  const contacts = useSelector((state) => state.contacts);
+  const dispatch = useDispatch();
+
+  const handleDeleteContact = (contactId) => {
+    dispatch(deleteContact(contactId));
+  };
+
   return (
     <ul className="contact-list">
       {contacts.map((contact) => (
         <ContactItem
           key={contact.id}
           contact={contact}
-          deleteContact={deleteContact}
+          handleDeleteContact={handleDeleteContact}
         />
       ))}
     </ul>
   );
 }
 
-function ContactItem({ contact, deleteContact }) {
+function ContactItem({ contact, handleDeleteContact }) {
   const handleDelete = () => {
-    deleteContact(contact.id);
+    handleDeleteContact(contact.id);
   };
 
   return (
@@ -34,7 +43,7 @@ function ContactItem({ contact, deleteContact }) {
 
 ContactItem.propTypes = {
   contact: PropTypes.object.isRequired,
-  deleteContact: PropTypes.func.isRequired,
+  handleDeleteContact: PropTypes.func.isRequired,
 };
 
 export default ContactList;

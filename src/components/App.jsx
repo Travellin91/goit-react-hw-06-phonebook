@@ -1,32 +1,39 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Container, Row, Col } from 'react-bootstrap';
 import ContactForms from './ContactForms/ContactForms';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
-import { addContact, deleteContact } from '../redux/contactsSlice';
-import { setFilter } from '../redux/filterSlice';
+import { addContact, deleteContact, setFilter, selectFilteredContacts } from '../redux/contactsSlice';
+
 
 function App() {
-  const contacts = useSelector((state) => state.contacts);
-  const filter = useSelector((state) => state.filter);
   const dispatch = useDispatch();
+  const contacts = useSelector(selectFilteredContacts);
+  const filter = useSelector((state) => state.filter);
 
-  const addNewContact = (newContact) => {
+  useEffect(() => {
+    const storedContacts = localStorage.getItem('contacts');
+    if (storedContacts) {
+      dispatch(addContact(JSON.parse(storedContacts)));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
+
+  const handleAddContact = (newContact) => {
     dispatch(addContact(newContact));
   };
 
-  const removeContact = (id) => {
+  const handleDeleteContact = (id) => {
     dispatch(deleteContact(id));
   };
 
-  const updateFilter = (filterValue) => {
-    dispatch(setFilter(filterValue));
+  const handleFilterChange = (event) => {
+    dispatch(setFilter(event.target.value));
   };
-
-  const filteredContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
 
   return (
     <Container>
@@ -34,13 +41,13 @@ function App() {
 
       <Row>
         <Col md={6}>
-          <ContactForms addContact={addNewContact} />
+          <ContactForms addContact={handleAddContact} />
         </Col>
         <Col md={6}>
           <div className="contacts-section">
             <h2 className="contacts-heading">Contacts</h2>
-            <Filter filter={filter} setFilter={updateFilter} />
-            <ContactList contacts={filteredContacts} deleteContact={removeContact} />
+            <Filter filter={filter} setFilter={handleFilterChange} />
+            <ContactList contacts={contacts} deleteContact={handleDeleteContact} />
           </div>
         </Col>
       </Row>
