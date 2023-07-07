@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import Notiflix from 'notiflix';
 import './contactforms.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../redux/contactsSlice';
+import { addContact } from '../..//redux/contactsSlice.js';
 
 function ContactForms() {
   const [name, setName] = useState('');
@@ -31,7 +31,11 @@ function ContactForms() {
     );
 
     if (existingContact) {
-      Notiflix.Report.warning('Alert', `Contact with name "${name}" already exists!`, 'Ok');
+      Notiflix.Report.warning(
+        'Alert',
+        `Contact with name "${name}" already exists!`,
+        'Ok'
+      );
       return;
     }
 
