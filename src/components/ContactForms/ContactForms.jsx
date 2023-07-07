@@ -1,90 +1,92 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { nanoid } from '@reduxjs/toolkit';
-import { addContact } from '../../redux/contactsSlice';
-import Notiflix from 'notiflix';
-import './contactforms.css';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/contactsAction';
+import PropTypes from 'prop-types';
+import { nanoid } from 'nanoid';
 
-function ContactForms() {
+const ContactForm = ({ items, onSubmit }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  const contacts = useSelector(state => state.contacts);
-  const dispatch = useDispatch();
+  const loginInputNameId = nanoid();
+  const loginInputNumberId = nanoid();
 
-  const handleNameChange = event => {
-    setName(event.target.value);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    if (name === 'name') {
+      setName(value);
+    } else if (name === 'number') {
+      setNumber(value);
+    }
   };
 
-  const handleNumberChange = event => {
-    setNumber(event.target.value);
-  };
-
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (name.trim() === '' || number.trim() === '') {
+    const addInputValue = (contact) =>
+      contact.name === name || contact.number === number;
+
+    if (items.some(addInputValue)) {
+      alert('Contact is already in contacts');
       return;
     }
 
-    const existingContact = contacts.find(
-      contact => contact.name.toLowerCase() === name.toLowerCase()
-    );
+    onSubmit({ name, number });
+    reset();
+  };
 
-    if (existingContact) {
-      Notiflix.Report.warning(
-        'Alert',
-        `Contact with name "${name}" already exists!`,
-        'Ok'
-      );
-      return;
-    }
-
-    const newContact = {
-      id: nanoid(),
-      name: name.trim(),
-      number: number.trim(),
-    };
-
-    dispatch(addContact(newContact));
-
+  const reset = () => {
     setName('');
     setNumber('');
   };
 
   return (
-    <form className="contact-form" onSubmit={handleSubmit}>
-      <label className="contact-form-label">
+    <form onSubmit={handleSubmit}>
+      <label htmlFor={loginInputNameId}>
         Name
         <input
-          className="contact-form-input"
           type="text"
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+          title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
           required
+          id={loginInputNameId}
           value={name}
-          onChange={handleNameChange}
+          onChange={handleInputChange}
         />
       </label>
-      <label className="contact-form-label">
+
+      <label htmlFor={loginInputNumberId}>
         Number
         <input
-          className="contact-form-input"
           type="tel"
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          title="Номер телефона должен состоять из цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
           required
+          id={loginInputNumberId}
           value={number}
-          onChange={handleNumberChange}
+          onChange={handleInputChange}
         />
       </label>
-      <button className="contact-form-button" type="submit">
-        Add Contact
-      </button>
+
+      <button type="submit">Add contact</button>
     </form>
   );
-}
+};
 
-export default ContactForms;
+ContactForm.propTypes = {
+  items: PropTypes.array.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  items: state.contacts.items || [],
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit: ({ name, number }) => dispatch(actions.addContact({ name, number })),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

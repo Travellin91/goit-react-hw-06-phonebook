@@ -1,33 +1,19 @@
-import React from 'react';
-import { InputGroup, FormControl } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { setFilter } from '../../redux/filterSlice';
-import { PersistGate } from 'redux-persist/integration/react';
-import { persistor } from '../../redux/store';
-import './filter.css';
+import { connect } from 'react-redux';
+import { changeFilter } from '../../redux/contactsSlice';
 
-function Filter() {
-  const filter = useSelector((state) => state.filter);
-  const dispatch = useDispatch();
+const Filter = ({ value, onChange }) => (
+  <label>
+    Find contacts by name
+    <input type="text" value={value} onChange={onChange} />
+  </label>
+);
 
-  const handleFilterChange = (event) => {
-    dispatch(setFilter(event.target.value));
-  };
+const mapStateToProps = state => ({
+  value: state.contacts.filter,
+});
 
-  return (
-    <PersistGate loading={null} persistor={persistor}>
-      <InputGroup className="filter-input">
-        <FormControl
-          type="text"
-          name="filter"
-          placeholder="Search by name"
-          value={filter}
-          onChange={handleFilterChange}
-        />
-      </InputGroup>
-    </PersistGate>
-  );
-}
+const mapDispatchToProps = dispatch => ({
+  onChange: event => dispatch(changeFilter(event.target.value)),
+});
 
-export default Filter;
-
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);
