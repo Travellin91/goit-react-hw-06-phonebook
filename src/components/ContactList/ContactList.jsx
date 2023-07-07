@@ -14,7 +14,7 @@ function ContactList() {
 
   return (
     <ul className="contact-list">
-      {contacts.map((contact) => (
+      {Array.isArray(contacts) && contacts.map((contact) => (
         <ContactItem
           key={contact.id}
           contact={contact}
